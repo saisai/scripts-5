@@ -1,13 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
-#####################################################################
+################################################
 # Script Name   : rsync_backup
 # Description   : Incremental backup with rsync
 # Args          : -
 # Author        : Ary Kleinerman
 # Email         : kleinerman@gmail.com
-#####################################################################
+################################################
 
+# Commands
 RSYNC=/usr/bin/rsync
 SSH=/usr/bin/ssh
 MKDIR=/bin/mkdir
@@ -18,24 +19,25 @@ RHOST=dax.capitalinasdc.com
 RUSER=root
 
 # Directories to backup
-DIR="/etc/apache2/sites-available \
-/var/www/site1.example.org \
-/var/www/site2.example.org \
-/var/www/site3.example.org"
+LPATH="/etc/apache2/sites-available \
+/var/www/red.capitalinasdc.com \
+/var/www/soporte.capitalinasdc.com \
+/var/www/racktables.capitalinasdc.com"
 
-########################################################################
+################################################
 
 WDAY=`date +%A`
 HOSTNAME=`hostname`
+
 BACKUPDIR=/root/backups/${HOSTNAME}/${WDAY}
-REMOTEDIR=/root/backups/${HOSTNAME}/current
+RPATH=/root/backups/${HOSTNAME}/current
 
 OPTS="-z -e ${SSH} --force --ignore-errors --delete --backup --backup-dir=${BACKUPDIR} -a"
 
-# the following line clears the last weeks incremental directory
-[ -d /tmp/emptydir ] || ${MKDIR} /tmp/emptydir
-${RSYNC} -e ${SSH} --delete -a /tmp/emptydir/ ${RUSER}@${RHOST}:${BACKUPDIR}/
-${RMDIR} /tmp/emptydir
+# the following lines clear the last weeks incremental directory
+EMPTYDIR=`mktemp -d`
+${RSYNC} -e ${SSH} --delete -a ${EMPTYDIR} ${RUSER}@${RHOST}:${BACKUPDIR}/
+${RMDIR} ${EMPTYDIR}
 
-# now the actual transfer
-${RSYNC} ${OPTS} ${DIR} ${RUSER}@${RHOST}:${REMOTEDIR}
+# rsync the current local path
+${RSYNC} ${OPTS} ${LPATH} ${RUSER}@${RHOST}:${RPATH}
