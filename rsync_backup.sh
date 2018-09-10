@@ -8,8 +8,13 @@
 # Email         : kleinerman@gmail.com
 #####################################################################
 
+RSYNC=/usr/bin/rsync
+SSH=/usr/bin/ssh
+MKDIR=/bin/mkdir
+RMDIR=/bin/rmdir
+
 # Remote server and user (for SSH)
-SERVER=remote.example.org
+RHOST=dax.capitalinasdc.com
 RUSER=root
 
 # Directories to backup
@@ -18,19 +23,19 @@ DIR="/etc/apache2/sites-available \
 /var/www/site2.example.org \
 /var/www/site3.example.org"
 
-############################################
+########################################################################
 
 WDAY=`date +%A`
 HOSTNAME=`hostname`
 BACKUPDIR=/root/backups/${HOSTNAME}/${WDAY}
 REMOTEDIR=/root/backups/${HOSTNAME}/current
 
-OPTS="-e ssh --force --ignore-errors --delete --backup --backup-dir=${BACKUPDIR} -a"
+OPTS="-z -e ${SSH} --force --ignore-errors --delete --backup --backup-dir=${BACKUPDIR} -a"
 
-# the following lineis clear the last weeks incremental directory
-[ -d /tmp/emptydir ] || mkdir /tmp/emptydir
-rsync -e ssh --delete -a /tmp/emptydir/ ${RUSER}@${SERVER}:${BACKUPDIR}/
-rmdir /tmp/emptydir
+# the following line clears the last weeks incremental directory
+[ -d /tmp/emptydir ] || ${MKDIR} /tmp/emptydir
+${RSYNC} -e ${SSH} --delete -a /tmp/emptydir/ ${RUSER}@${RHOST}:${BACKUPDIR}/
+${RMDIR} /tmp/emptydir
 
-# Current backup
-rsync ${OPTS} ${DIR} ${RUSER}@${SERVER}:${REMOTEDIR}
+# now the actual transfer
+${RSYNC} ${OPTS} ${DIR} ${RUSER}@${RHOST}:${REMOTEDIR}
