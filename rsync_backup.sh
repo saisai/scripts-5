@@ -35,7 +35,7 @@ OPTS="-z -e ${SSH} --force --ignore-errors --delete --backup --backup-dir=${BACK
 
 # the following lines clear the last weeks incremental directory
 EMPTYDIR=`mktemp -d`
-${RSYNC} -e ${SSH} --delete -a ${EMPTYDIR} ${RUSER}@${RHOST}:${BACKUPDIR}/
+${RSYNC} -e ${SSH} --delete -a ${EMPTYDIR}/ ${RUSER}@${RHOST}:${BACKUPDIR}/
 ${RMDIR} ${EMPTYDIR}
 
 # rsync the current local path
