@@ -15,14 +15,13 @@ MKDIR=/bin/mkdir
 RMDIR=/bin/rmdir
 
 # Remote server and user (for SSH)
-RHOST=dax.capitalinasdc.com
+RHOST=remote.example.org
 RUSER=root
 
 # Directories to backup
-LPATH="/etc/apache2/sites-available \
-/var/www/red.capitalinasdc.com \
-/var/www/soporte.capitalinasdc.com \
-/var/www/racktables.capitalinasdc.com"
+LPATH="/path/to/files1 \
+/path/to/files2 \
+/path/to/files3"
 
 ################################################
 
