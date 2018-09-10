@@ -31,7 +31,7 @@ HOSTNAME=`hostname`
 BACKUPDIR=/root/backups/${HOSTNAME}/${WDAY}
 RPATH=/root/backups/${HOSTNAME}/current
 
-OPTS="-z -e ${SSH} --force --ignore-errors --delete --backup --backup-dir=${BACKUPDIR} -a"
+OPTS="-z -e ${SSH} --force --ignore-errors --delete --backup --backup-dir=${BACKUPDIR} -a -R"
 
 # the following lines clear the last weeks incremental directory
 EMPTYDIR=`mktemp -d`
